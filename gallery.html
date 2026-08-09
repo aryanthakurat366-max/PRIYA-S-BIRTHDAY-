@@ -79,10 +79,10 @@
 <script src="script.js"></script>
 
 <script>
-// Suit Suit song — plays with sound the moment the gate is tapped, starting after 7 seconds.
+// Suit Suit song — plays with sound the moment the gate is tapped, starting after 8 seconds.
 // Uses the official YouTube video via the IFrame API.
 (function(){
-  var VIDEO_ID = "88LgZ-cf_P4"; // Suit Suit — official video, Hindi Medium (T-Series)
+  var VIDEO_ID = "88LgZ-cf_P4"; // Suit Suit — official video, Hindi Medium (T-Series)[cite: 3]
   var player, apiReady = false, gateTapped = false;
   var gate = document.getElementById("galleryGate");
   var toggleBtn = document.getElementById("suitSuitToggle");
@@ -115,7 +115,7 @@
 
   function startPlayback(){
     if (!apiReady || !player) return;
-    player.seekTo(7, true); // Skip the first 7 seconds of dialogues
+    player.seekTo(8, true); // Skip the first 8 seconds of dialogues[cite: 3]
     player.unMute();
     player.setVolume(100);
     player.playVideo();
@@ -133,7 +133,7 @@
   toggleBtn.addEventListener('click', function(){
     if (!apiReady || !player) return;
     if (player.isMuted() || player.getPlayerState() !== YT.PlayerState.PLAYING) {
-      player.seekTo(7, true);
+      player.seekTo(8, true); //[cite: 3]
       player.unMute();
       player.setVolume(100);
       player.playVideo();
