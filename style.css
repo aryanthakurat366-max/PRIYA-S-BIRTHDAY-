@@ -742,6 +742,40 @@ footer{
   .seal-ring{animation:none;}
 }
 
+/* ---------- Suit Suit gate / player / toggle (site-wide, injected by script.js) ---------- */
+.suitsuit-gate{
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(ellipse at top left, rgba(156,46,38,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(28,61,102,0.6) 0%, transparent 55%),
+    linear-gradient(135deg, #7a1f18 0%, #340c09 38%, #060f1e 62%, #1c3d66 100%);
+  cursor:pointer; text-align:center; padding:24px;
+  transition: opacity 0.5s ease;
+}
+.suitsuit-gate.hidden{ opacity:0; pointer-events:none; }
+.suitsuit-gate-icon{
+  width:84px; height:84px; margin:0 auto 18px; border-radius:50%;
+  border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center;
+  font-size:34px; background:rgba(255,204,102,0.08);
+}
+.suitsuit-gate-label{
+  font-family:'Helvetica Neue', Arial, sans-serif; letter-spacing:0.2em;
+  text-transform:uppercase; font-size:11px; color: var(--gold-soft);
+}
+.suitsuit-player-hidden{
+  position:fixed; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none;
+}
+.suitsuit-toggle{
+  position:fixed; bottom:18px; right:18px; z-index:999;
+  background:linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+  color:#340c09; border:none; border-radius:999px;
+  padding:10px 18px; font-family:'Helvetica Neue', Arial, sans-serif;
+  font-size:14px; font-weight:600; letter-spacing:.02em;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35); cursor:pointer;
+  display:none; align-items:center; gap:8px;
+}
+
 @media (max-width: 480px){
   .letter{padding: 32px 24px; font-size: 16px;}
   .gallery{grid-template-columns: repeat(2, 1fr);}
