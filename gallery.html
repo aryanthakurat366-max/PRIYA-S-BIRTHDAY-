@@ -33,7 +33,7 @@
 </div>
 
 <div id="suitSuitPlayer" style="position:fixed; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none;"></div>
-<button id="suitSuitToggle" aria-label="Toggle Suit Suit song" style="
+<button id="suitSuitToggle" aria-label="Toggle Sunflower song" style="
   position:fixed; bottom:18px; right:18px; z-index:999;
   background:linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
   color:#340c09; border:none; border-radius:999px;
@@ -41,7 +41,7 @@
   font-size:14px; font-weight:600; letter-spacing:.02em;
   box-shadow:0 6px 20px rgba(0,0,0,0.35); cursor:pointer;
   display:none; align-items:center; gap:8px;">
-  🎵 <span id="suitSuitLabel">Playing "Suit Suit" — tap to mute</span>
+  🎵 <span id="suitSuitLabel">Playing "Sunflower" — tap to mute</span>
 </button>
 
 <nav class="page-nav">
@@ -79,17 +79,17 @@
 <script src="script.js"></script>
 
 <script>
-// Suit Suit song — plays with sound the moment the gate is tapped, starting after 8 seconds.
-// Uses the official YouTube video via the IFrame API.
+// Sunflower — plays with sound the moment the gate is tapped.
+// Uses the official YouTube video via the IFrame API (we don't host the audio file ourselves).
 (function(){
-  var VIDEO_ID = "88LgZ-cf_P4"; // Suit Suit — official video, Hindi Medium (T-Series)[cite: 3]
+  var VIDEO_ID = "ApXoWvfEYVU"; // Sunflower — official video, Post Malone & Swae Lee (Republic Records)
   var player, apiReady = false, gateTapped = false;
   var gate = document.getElementById("galleryGate");
   var toggleBtn = document.getElementById("suitSuitToggle");
   var label = document.getElementById("suitSuitLabel");
 
   function setLabel(playing){
-    label.textContent = playing ? 'Playing "Suit Suit" — tap to mute' : 'Play "Suit Suit"';
+    label.textContent = playing ? 'Playing "Sunflower" — tap to mute' : 'Play "Sunflower"';
   }
 
   window.onYouTubeIframeAPIReady = function(){
@@ -115,7 +115,6 @@
 
   function startPlayback(){
     if (!apiReady || !player) return;
-    player.seekTo(8, true); // Skip the first 8 seconds of dialogues[cite: 3]
     player.unMute();
     player.setVolume(100);
     player.playVideo();
@@ -133,7 +132,6 @@
   toggleBtn.addEventListener('click', function(){
     if (!apiReady || !player) return;
     if (player.isMuted() || player.getPlayerState() !== YT.PlayerState.PLAYING) {
-      player.seekTo(8, true); //[cite: 3]
       player.unMute();
       player.setVolume(100);
       player.playVideo();
