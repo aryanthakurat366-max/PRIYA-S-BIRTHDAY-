@@ -225,9 +225,9 @@ function burstEmojis(count){
   });
 })();
 
-// ---------- Suit Suit song: persists across every page, until the tab closes ----------
+// ---------- Sunflower song: persists across every page, until the tab closes ----------
 (function initSuitSuitPlayer(){
-  var VIDEO_ID = "88LgZ-cf_P4"; // Suit Suit — official video, Hindi Medium (T-Series)
+  var VIDEO_ID = "3E78T8h5EhA"; // Sunflower — Post Malone & Swae Lee, official video
   var STORAGE_KEY = "suitsuit_state";
   var player, apiReady = false, gateHandled = false, saveInterval, label;
 
@@ -255,8 +255,8 @@ function burstEmojis(count){
   var toggleBtn = document.createElement('button');
   toggleBtn.id = 'suitSuitToggle';
   toggleBtn.className = 'suitsuit-toggle';
-  toggleBtn.setAttribute('aria-label', 'Toggle Suit Suit song');
-  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Suit Suit" — tap to mute</span>';
+  toggleBtn.setAttribute('aria-label', 'Toggle Sunflower song');
+  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Sunflower" — tap to mute</span>';
 
   function mount(){
     document.body.appendChild(playerHost);
@@ -269,7 +269,7 @@ function burstEmojis(count){
 
   function setLabel(unmuted){
     if(!label) label = document.getElementById('suitSuitLabel');
-    if(label) label.textContent = unmuted ? 'Playing "Suit Suit" — tap to mute' : 'Muted — tap to unmute';
+    if(label) label.textContent = unmuted ? 'Playing "Sunflower" — tap to mute' : 'Muted — tap to unmute';
   }
 
   function startSaving(){
