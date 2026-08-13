@@ -225,6 +225,145 @@ function burstEmojis(count){
   });
 })();
 
+// ---------- Suit Suit song: persists across every page, until the tab closes ----------
+(function initSuitSuitPlayer(){
+  var VIDEO_ID = "88LgZ-cf_P4"; // Suit Suit — official video, Hindi Medium (T-Series)
+  var STORAGE_KEY = "suitsuit_state";
+  var player, apiReady = false, gateHandled = false, saveInterval, label;
+
+  function getState(){
+    try{ return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || { started:false, time:0, muted:false }; }
+    catch(e){ return { started:false, time:0, muted:false }; }
+  }
+  function setState(patch){
+    var s = getState();
+    Object.assign(s, patch);
+    try{ sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }catch(e){}
+    return s;
+  }
+
+  // Build the gate / hidden player / toggle once per page load.
+  var gate = document.createElement('div');
+  gate.id = 'suitSuitGate';
+  gate.className = 'suitsuit-gate';
+  gate.innerHTML = '<div><div class="suitsuit-gate-icon">🎁</div><div class="suitsuit-gate-label">Tap to enter</div></div>';
+
+  var playerHost = document.createElement('div');
+  playerHost.id = 'suitSuitPlayer';
+  playerHost.className = 'suitsuit-player-hidden';
+
+  var toggleBtn = document.createElement('button');
+  toggleBtn.id = 'suitSuitToggle';
+  toggleBtn.className = 'suitsuit-toggle';
+  toggleBtn.setAttribute('aria-label', 'Toggle Suit Suit song');
+  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Suit Suit" — tap to mute</span>';
+
+  function mount(){
+    document.body.appendChild(playerHost);
+    document.body.appendChild(toggleBtn);
+    if(!getState().started){
+      document.body.appendChild(gate);
+    }
+  }
+  if(document.body){ mount(); } else { document.addEventListener('DOMContentLoaded', mount); }
+
+  function setLabel(unmuted){
+    if(!label) label = document.getElementById('suitSuitLabel');
+    if(label) label.textContent = unmuted ? 'Playing "Suit Suit" — tap to mute' : 'Muted — tap to unmute';
+  }
+
+  function startSaving(){
+    if(saveInterval) clearInterval(saveInterval);
+    saveInterval = setInterval(function(){
+      if(player && player.getCurrentTime){
+        setState({ time: player.getCurrentTime(), muted: player.isMuted() });
+      }
+    }, 1500);
+  }
+
+  window.addEventListener('beforeunload', function(){
+    if(player && player.getCurrentTime){
+      setState({ time: player.getCurrentTime(), muted: player.isMuted() });
+    }
+  });
+
+  window.onYouTubeIframeAPIReady = function(){
+    apiReady = true;
+    player = new YT.Player('suitSuitPlayer', {
+      height: '1', width: '1', videoId: VIDEO_ID,
+      // Always start muted — muted autoplay is universally allowed. If this page load
+      // is a continuation of a session that already began (gate already tapped on an
+      // earlier page), we unmute right after playback starts.
+      playerVars: { autoplay: 1, mute: 1, controls: 0, disablekb: 1, playsinline: 1 },
+      events: {
+        onReady: function(){
+          toggleBtn.style.display = 'flex';
+          var state = getState();
+          if(state.started){
+            if(state.time && state.time > 0) player.seekTo(state.time, true);
+            player.playVideo();
+            if(!state.muted){
+              setTimeout(function(){ player.unMute(); player.setVolume(100); setLabel(true); }, 150);
+            } else {
+              setLabel(false);
+            }
+            startSaving();
+          } else {
+            player.pauseVideo();
+          }
+        },
+        onStateChange: function(e){
+          if(e.data === YT.PlayerState.PLAYING) setLabel(!player.isMuted());
+          if(e.data === YT.PlayerState.ENDED){
+            // Keep the mood going for as long as they're browsing the site.
+            player.seekTo(0, true);
+            player.playVideo();
+          }
+        }
+      }
+    });
+  };
+
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  function handleGateTap(){
+    if(gateHandled) return;
+    gateHandled = true;
+    setState({ started: true, muted: false });
+    gate.classList.add('hidden');
+    setTimeout(function(){ if(gate.parentNode) gate.parentNode.removeChild(gate); }, 500);
+    if(apiReady && player){
+      player.seekTo(getState().time || 0, true);
+      player.unMute();
+      player.setVolume(100);
+      player.playVideo();
+      setLabel(true);
+      startSaving();
+    }
+    // If the API isn't ready yet, onReady will see started:true and take it from there.
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target === gate || gate.contains(e.target)) handleGateTap();
+  });
+
+  toggleBtn.addEventListener('click', function(){
+    if(!apiReady || !player) return;
+    if(player.isMuted()){
+      player.unMute();
+      player.setVolume(100);
+      setLabel(true);
+      setState({ muted: false });
+    } else {
+      player.mute();
+      setLabel(false);
+      setState({ muted: true });
+    }
+  });
+})();
+
 // ---------- cover page: slide to reveal ----------
 (function initCover(){
   const seal = document.getElementById('coverSeal');
