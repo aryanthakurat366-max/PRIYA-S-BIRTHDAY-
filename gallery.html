@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Priya — Photos</title>
+<meta property="og:title" content="Happy Birthday, Priya 🎂">
+<meta property="og:description" content="A few favorites, just for you.">
+<meta name="description" content="A few favorite photos, just for you, Priya.">
+<meta name="theme-color" content="#340c09">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="page-nav">
+  <a href="index.html" class="nav-link">Cover</a>
+  <a href="message.html" class="nav-link">Your Card</a>
+  <a href="gallery.html" class="nav-link active">Photos</a>
+</nav>
+
+<main>
+  <div class="eyebrow">A little something for you, Priya</div>
+  <h1>A Few <em>Favorites</em></h1>
+  <div class="date-line">TAP A PHOTO TO ZOOM</div>
+  <div class="divider"></div>
+
+  <div class="gallery reveal" id="gallery">
+    <div class="frame"><img src="assets/photo1.png" alt="Photo 1"></div>
+    <div class="frame"><img src="assets/photo2.png" alt="Photo 2"></div>
+    <div class="frame"><img src="assets/photo3.png" alt="Photo 3"></div>
+    <div class="frame"><img src="assets/photo4.png" alt="Photo 4"></div>
+    <div class="frame"><img src="assets/photo5.png" alt="Photo 5"></div>
+  </div>
+
+  <div class="page-actions reveal">
+    <a href="message.html" class="candle-btn" style="text-decoration:none;">← Back to your card</a>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="Enlarged photo">
+</div>
+
+<footer>Made just for you</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
