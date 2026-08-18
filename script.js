@@ -364,13 +364,94 @@ function burstEmojis(count){
   });
 })();
 
-// ---------- cover page: slide to reveal ----------
+// ---------- cover page: slide to reveal, now with a light-burst on tap ----------
 (function initCover(){
   const seal = document.getElementById('coverSeal');
   const face = document.getElementById('coverFace');
   if(!seal || !face) return;
   seal.addEventListener('click', () => {
+    const rect = seal.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    if(typeof launchFirework === 'function') launchFirework(cx, cy);
+
+    const burst = document.createElement('div');
+    burst.className = 'seal-burst';
+    seal.appendChild(burst);
+    requestAnimationFrame(() => burst.classList.add('go'));
+    setTimeout(() => burst.remove(), 900);
+
     seal.classList.add('hidden');
     face.classList.add('open');
+  });
+})();
+
+// ---------- ambient floating embers (every page) ----------
+(function initEmbers(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion) return;
+
+  function spawnEmber(){
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const size = 3 + Math.random() * 4;
+    e.style.width = size + 'px';
+    e.style.height = size + 'px';
+    e.style.left = Math.random() * 100 + 'vw';
+    const duration = 9 + Math.random() * 8;
+    e.style.animationDuration = duration + 's';
+    e.style.setProperty('--drift', (Math.random() * 140 - 70) + 'px');
+    document.body.appendChild(e);
+    e.addEventListener('animationend', () => e.remove());
+  }
+
+  function loop(){
+    spawnEmber();
+    setTimeout(loop, 550 + Math.random() * 500);
+  }
+  loop();
+})();
+
+// ---------- soft cursor sparkle trail (desktop only) ----------
+(function initCursorSparkles(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(reduceMotion || !finePointer) return;
+
+  let last = 0;
+  function spark(x, y){
+    const now = Date.now();
+    if(now - last < 45) return;
+    last = now;
+    const s = document.createElement('div');
+    s.className = 'cursor-spark';
+    s.style.left = x + 'px';
+    s.style.top = y + 'px';
+    document.body.appendChild(s);
+    requestAnimationFrame(() => {
+      s.style.transform = `translate(${(Math.random()-0.5)*24}px, ${10 + Math.random()*20}px) scale(0.3)`;
+      s.style.opacity = '0';
+    });
+    setTimeout(() => s.remove(), 650);
+  }
+  document.addEventListener('mousemove', (e) => spark(e.clientX, e.clientY));
+})();
+
+// ---------- gallery frame 3D tilt (desktop only) ----------
+(function initFrameTilt(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(reduceMotion || !finePointer) return;
+
+  document.querySelectorAll('.frame').forEach(frame => {
+    frame.addEventListener('mousemove', (e) => {
+      const rect = frame.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      frame.style.transform = `perspective(600px) rotateY(${px*10}deg) rotateX(${-py*10}deg) scale(1.03)`;
+    });
+    frame.addEventListener('mouseleave', () => {
+      frame.style.transform = '';
+    });
   });
 })();
