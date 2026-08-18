@@ -227,7 +227,7 @@ function burstEmojis(count){
 
 // ---------- Ik Vaari Aa song: persists across every page, until the tab closes ----------
 (function initSuitSuitPlayer(){
-  var VIDEO_ID = "zXLgYBSdv74"; // Ik Vaari Aa — Raabta, Arijit Singh, official video
+  var VIDEO_ID = "y4Ln-14NIBM"; // Ik Vaari Aa — Raabta, Arijit Singh
   var STORAGE_KEY = "suitsuit_state";
   var player, apiReady = false, gateHandled = false, saveInterval, label;
 
