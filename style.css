@@ -76,11 +76,33 @@ h1{
   font-weight: 400;
   line-height: 1.1;
   color: var(--cream);
+  background: linear-gradient(100deg, var(--cream) 25%, var(--gold) 50%, var(--cream) 75%);
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 6s ease-in-out infinite;
 }
 
 h1 em{
   font-style: italic;
   color: var(--gold-soft);
+  background: linear-gradient(100deg, var(--gold) 20%, var(--gold-soft) 50%, var(--gold) 80%);
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 6s ease-in-out infinite;
+}
+
+@keyframes shimmerText{
+  0%{background-position: 0% center;}
+  50%{background-position: 100% center;}
+  100%{background-position: 0% center;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  h1, h1 em{animation:none; background-position: 50% center;}
 }
 
 .date-line{
@@ -159,6 +181,28 @@ h1 em{
   overflow:hidden;
   position:relative;
   cursor: zoom-in;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.frame::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+  pointer-events:none;
+  z-index:2;
+}
+
+.frame:hover::before{
+  transform: translateX(120%);
+}
+
+.frame:hover{
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 0 1px var(--gold);
 }
 
 .frame img{
@@ -581,7 +625,7 @@ footer{
   .scroll-hint{animation:none;}
 }
 
-/* ---------- New: page nav ---------- */
+/* ---------- page nav ---------- */
 .page-nav{
   position:relative;
   z-index:1;
@@ -624,7 +668,7 @@ footer{
   margin-top: 50px;
 }
 
-/* ---------- New: cover / slide-to-reveal page ---------- */
+/* ---------- cover / slide-to-reveal page ---------- */
 .cover-wrap{
   position:relative;
   z-index:1;
@@ -665,6 +709,25 @@ footer{
   opacity:0;
   transform: scale(0.8);
   pointer-events:none;
+}
+
+/* light-burst on tap */
+.seal-burst{
+  position:absolute;
+  left:50%; top:50%;
+  width:20px; height:20px;
+  margin:-10px 0 0 -10px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(255,226,163,0.95) 0%, rgba(255,204,102,0.5) 40%, transparent 72%);
+  transform: scale(0);
+  opacity:1;
+  pointer-events:none;
+  z-index:5;
+  transition: transform 0.8s cubic-bezier(0.15,0.7,0.3,1), opacity 0.8s ease-out;
+}
+.seal-burst.go{
+  transform: scale(16);
+  opacity:0;
 }
 
 .seal-ring{
@@ -774,6 +837,40 @@ footer{
   font-size:14px; font-weight:600; letter-spacing:.02em;
   box-shadow:0 6px 20px rgba(0,0,0,0.35); cursor:pointer;
   display:none; align-items:center; gap:8px;
+}
+
+/* ---------- NEW: ambient floating embers (site-wide) ---------- */
+.ember{
+  position:fixed;
+  bottom:-12px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  background: radial-gradient(circle, var(--gold-soft) 0%, var(--gold) 55%, transparent 100%);
+  box-shadow: 0 0 8px 2px rgba(255,204,102,0.45);
+  opacity:0;
+  animation-name: emberRise;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes emberRise{
+  0%{ transform: translate(0, 0); opacity:0; }
+  8%{ opacity:0.85; }
+  85%{ opacity:0.5; }
+  100%{ transform: translate(var(--drift), -110vh); opacity:0; }
+}
+
+/* ---------- NEW: cursor sparkle trail (desktop only) ---------- */
+.cursor-spark{
+  position:fixed;
+  width:5px; height:5px;
+  border-radius:50%;
+  background: var(--gold-soft);
+  box-shadow: 0 0 6px 2px rgba(255,226,163,0.6);
+  pointer-events:none;
+  z-index:1500;
+  opacity:0.9;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
 }
 
 @media (max-width: 480px){
