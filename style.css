@@ -860,17 +860,172 @@ footer{
   100%{ transform: translate(var(--drift), -110vh); opacity:0; }
 }
 
+/* ---------- NEW: glowing orb that trails the cursor (desktop only) ---------- */
+.cursor-orb{
+  position:fixed;
+  left:0; top:0;
+  width:30px; height:30px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(255,226,163,0.55) 0%, rgba(255,204,102,0.25) 45%, transparent 75%);
+  pointer-events:none;
+  z-index:1499;
+  opacity:0;
+  transition: opacity 0.4s ease;
+  mix-blend-mode: screen;
+}
+.cursor-orb.active{ opacity:1; }
+
 /* ---------- NEW: cursor sparkle trail (desktop only) ---------- */
 .cursor-spark{
   position:fixed;
-  width:5px; height:5px;
+  width:6px; height:6px;
   border-radius:50%;
   background: var(--gold-soft);
-  box-shadow: 0 0 6px 2px rgba(255,226,163,0.6);
+  box-shadow: 0 0 8px 3px rgba(255,226,163,0.7);
   pointer-events:none;
   z-index:1500;
-  opacity:0.9;
+  opacity:0.95;
   transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+/* ---------- NEW: big radiant burst (celebrate button) ---------- */
+.mega-burst{
+  position:fixed;
+  width:26px; height:26px;
+  margin:-13px 0 0 -13px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(255,226,163,0.95) 0%, rgba(255,204,102,0.55) 40%, transparent 72%);
+  transform: scale(0);
+  opacity:1;
+  pointer-events:none;
+  z-index:1600;
+  transition: transform 1.1s cubic-bezier(0.15,0.7,0.3,1), opacity 1.1s ease-out;
+}
+.mega-burst.go{
+  transform: scale(34);
+  opacity:0;
+}
+
+/* ---------- NEW: staggered gallery entrance ---------- */
+.frame-stagger{
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+#gallery.in-view .frame-stagger{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+@media (prefers-reduced-motion: reduce){
+  .frame-stagger{opacity:1; transform:none; transition:none;}
+}
+
+/* ---------- NEW: double-tap heart burst on photos ---------- */
+.heart-burst-piece{
+  position:fixed;
+  transform: translate(-50%,-50%);
+  font-size: 22px;
+  z-index: 1600;
+  pointer-events:none;
+  transition: transform 0.9s cubic-bezier(0.15,0.6,0.3,1), opacity 0.9s ease-out;
+  opacity: 1;
+}
+
+/* ---------- NEW: ambient breathing glow around gallery frames ---------- */
+.frame{
+  animation: frameGlowPulse 4.5s ease-in-out infinite;
+}
+.frame:nth-child(1){ animation-delay: 0s; }
+.frame:nth-child(2){ animation-delay: 0.9s; }
+.frame:nth-child(3){ animation-delay: 1.8s; }
+.frame:nth-child(4){ animation-delay: 2.7s; }
+.frame:nth-child(5){ animation-delay: 3.6s; }
+
+.frame:hover{
+  animation-play-state: paused;
+}
+
+@keyframes frameGlowPulse{
+  0%,100%{ box-shadow: 0 0 0 rgba(255,204,102,0); }
+  50%{ box-shadow: 0 0 20px 3px rgba(255,204,102,0.3); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .frame{animation:none;}
+}
+
+/* ---------- NEW: sealed letter reveal ---------- */
+.envelope-wrap{
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 140px;
+}
+.envelope-seal{
+  cursor: pointer;
+  text-align: center;
+  padding: 34px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.envelope-seal:hover{
+  border-color: var(--gold);
+  background: rgba(227,181,103,0.06);
+}
+.envelope-seal.hidden{
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+.envelope-seal-icon{
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.envelope-seal-label{
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(246,241,230,0.55);
+}
+.envelope-letter{
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.8s ease;
+  text-align: left;
+  padding: 0 4px;
+}
+.envelope-letter.show{
+  opacity: 1;
+  max-height: 900px;
+  margin-top: 10px;
+}
+.envelope-letter p{
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--gold-soft);
+  font-style: italic;
+  white-space: pre-wrap;
+}
+.envelope-cursor{
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--gold);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: caretBlink 0.9s steps(1) infinite;
+}
+@keyframes caretBlink{
+  50%{ opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .envelope-cursor{ animation: none; }
 }
 
 @media (max-width: 480px){
