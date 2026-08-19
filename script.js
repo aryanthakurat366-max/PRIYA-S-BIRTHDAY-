@@ -414,10 +414,11 @@ function launchMegaBurst(x, y){
   });
 })();
 
-// ---------- final surprise: sealed letter that unfolds with a typewriter reveal ----------
+// ---------- final surprise: sealed letter that pops out, unfolds, then reveals with a typewriter effect ----------
 (function initFinalEnvelope(){
   const seal = document.getElementById('envelopeSeal');
   const letterBox = document.getElementById('envelopeLetter');
+  const paper = document.getElementById('envelopePaper');
   const textEl = document.getElementById('envelopeText');
   if(!seal || !letterBox || !textEl) return;
 
@@ -437,6 +438,11 @@ function launchMegaBurst(x, y){
 
     seal.classList.add('hidden');
     letterBox.classList.add('show');
+    if(paper){
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => paper.classList.add('open'));
+      });
+    }
 
     const caret = document.createElement('span');
     caret.className = 'envelope-cursor';
@@ -451,7 +457,7 @@ function launchMegaBurst(x, y){
         caret.remove();
       }
     }
-    setTimeout(typeNext, 500);
+    setTimeout(typeNext, paper ? 850 : 500);
   });
 })();
 
