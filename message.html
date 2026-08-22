@@ -8,6 +8,9 @@
 <meta property="og:description" content="A little something made just for you.">
 <meta name="description" content="A little something made just for you, Priya.">
 <meta name="theme-color" content="#340c09">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,7 +27,7 @@
   <div class="eyebrow">A little something for you, Priya</div>
   <h1>Happy Birthday, <em>Priya</em></h1>
   <div class="date-line">DECEMBER 22 · TURNING 25</div>
-  <div class="divider"></div>
+  <div class="divider"><span></span><i>✦</i><span></span></div>
 
   <section class="letter reveal">
     <p>I wanted to do something a little different than just another birthday text, so I built you this.</p>
@@ -113,6 +116,15 @@
     <div class="gallery-heading">Need a compliment?</div>
     <button class="candle-btn" id="complimentBtn">Tap for one</button>
     <p class="box-reveal" id="complimentResult"></p>
+  </div>
+
+  <div class="surprises reveal">
+    <div class="gallery-heading">Scratch for a little fortune</div>
+    <div class="scratch-wrap">
+      <p class="scratch-text" id="scratchText"></p>
+      <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+    </div>
+    <p class="box-reveal" id="scratchHint">Drag your finger or mouse across the gold</p>
   </div>
 
   <div class="surprises reveal" style="border-top:1px solid var(--line);">
