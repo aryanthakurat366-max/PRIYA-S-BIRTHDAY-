@@ -8,45 +8,39 @@
 <meta property="og:description" content="A few favorites, just for you.">
 <meta name="description" content="A few favorite photos, just for you, Priya.">
 <meta name="theme-color" content="#340c09">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="stars" id="stars"></div>
-
 <nav class="page-nav">
   <a href="index.html" class="nav-link">Cover</a>
   <a href="message.html" class="nav-link">Your Card</a>
   <a href="gallery.html" class="nav-link active">Photos</a>
 </nav>
-
 <main>
   <div class="eyebrow">A little something for you, Priya</div>
   <h1>A Few <em>Favorites</em></h1>
-  <div class="date-line">TAP A PHOTO TO ZOOM</div>
-  <div class="divider"></div>
-
+  <div class="date-line">TAP A PHOTO TO ZOOM · DOUBLE-TAP FOR A LITTLE SURPRISE</div>
+  <div class="divider"><span></span><i>✦</i><span></span></div>
   <div class="gallery reveal" id="gallery">
-    <div class="frame"><img src="assets/photo1.png" alt="Photo 1"></div>
-    <div class="frame"><img src="assets/photo2.png" alt="Photo 2"></div>
-    <div class="frame"><img src="assets/photo3.png" alt="Photo 3"></div>
-    <div class="frame"><img src="assets/photo4.png" alt="Photo 4"></div>
-    <div class="frame"><img src="assets/photo5.png" alt="Photo 5"></div>
+    <div class="frame"><div class="frame-photo"><img src="assets/photo1.png" alt="Photo 1" loading="lazy" decoding="async"></div></div>
+    <div class="frame"><div class="frame-photo"><img src="assets/photo2.png" alt="Photo 2" loading="lazy" decoding="async"></div></div>
+    <div class="frame"><div class="frame-photo"><img src="assets/photo3.png" alt="Photo 3" loading="lazy" decoding="async"></div></div>
+    <div class="frame"><div class="frame-photo"><img src="assets/photo4.png" alt="Photo 4" loading="lazy" decoding="async"></div></div>
+    <div class="frame"><div class="frame-photo"><img src="assets/photo5.png" alt="Photo 5" loading="lazy" decoding="async"></div></div>
   </div>
-
   <div class="page-actions reveal">
     <a href="message.html" class="candle-btn" style="text-decoration:none;">← Back to your card</a>
   </div>
 </main>
-
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose">✕</button>
   <img id="lightboxImg" src="" alt="Enlarged photo">
 </div>
-
 <footer>Made just for you</footer>
-
 <script src="script.js"></script>
-
 </body>
 </html>
