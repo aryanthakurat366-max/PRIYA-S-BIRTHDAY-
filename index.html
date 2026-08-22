@@ -8,12 +8,13 @@
 <meta property="og:description" content="A little something made just for you.">
 <meta name="description" content="A little something made just for you, Priya.">
 <meta name="theme-color" content="#340c09">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="stars" id="stars"></div>
-
 <div class="cover-wrap">
   <div class="cover-card">
     <div class="cover-seal" id="coverSeal">
@@ -21,19 +22,31 @@
       <div class="seal-ring">🎂</div>
       <div class="tap-label">Tap to open</div>
     </div>
-
     <div class="cover-face" id="coverFace">
       <div class="eyebrow" style="margin-bottom:14px;">A little something for you, Priya</div>
       <h1>Happy Birthday, <em>Priya</em></h1>
       <div class="date-line">DECEMBER 22 · TURNING 25</div>
+
+      <div class="countdown" id="countdown">
+        <div class="countdown-candle">
+          <div class="candle-flame"></div>
+          <div class="candle-wax" id="candleWax"></div>
+        </div>
+        <div class="countdown-nums">
+          <div class="cd-unit"><span id="cdDays">00</span><label>days</label></div>
+          <div class="cd-unit"><span id="cdHours">00</span><label>hrs</label></div>
+          <div class="cd-unit"><span id="cdMins">00</span><label>min</label></div>
+          <div class="cd-unit"><span id="cdSecs">00</span><label>sec</label></div>
+        </div>
+        <div class="countdown-label" id="countdownLabel">until you turn 25</div>
+      </div>
+
       <p>I built you something a little different than just another birthday text. Come read it.</p>
       <a href="message.html" class="candle-btn" style="text-decoration:none; display:inline-block;">Open your card</a>
     </div>
   </div>
 </div>
-
 <footer style="position:relative; z-index:1;">Made just for you</footer>
-
 <script src="script.js"></script>
 </body>
 </html>
