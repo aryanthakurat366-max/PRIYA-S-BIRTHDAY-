@@ -275,6 +275,151 @@ function launchMegaBurst(x, y){
   });
 })();
 
+// ---------- NEW: birthday countdown (candle burns down toward the big day) ----------
+(function initCountdown(){
+  const wrap = document.getElementById('countdown');
+  if(!wrap) return;
+  const daysEl = document.getElementById('cdDays');
+  const hoursEl = document.getElementById('cdHours');
+  const minsEl = document.getElementById('cdMins');
+  const secsEl = document.getElementById('cdSecs');
+  const waxEl = document.getElementById('candleWax');
+  const labelEl = document.getElementById('countdownLabel');
+  if(!daysEl || !waxEl) return;
+
+  const WINDOW_DAYS = 45; // candle reads "full" from 45 days out, and burns down to nothing on the day
+
+  function getTarget(now){
+    let target = new Date(now.getFullYear(), 11, 22, 0, 0, 0);
+    if(target < now) target = new Date(now.getFullYear()+1, 11, 22, 0, 0, 0);
+    return target;
+  }
+
+  let fired = false;
+  function tick(){
+    const now = new Date();
+    const target = getTarget(now);
+    const diff = target - now;
+
+    if(diff <= 0){
+      daysEl.textContent = hoursEl.textContent = minsEl.textContent = secsEl.textContent = '00';
+      if(labelEl) labelEl.textContent = "it's your day 🎂";
+      waxEl.style.height = '0%';
+      if(!fired){
+        fired = true;
+        if(typeof launchMegaBurst === 'function'){
+          const rect = wrap.getBoundingClientRect();
+          launchMegaBurst(rect.left + rect.width/2, rect.top + rect.height/2);
+        }
+      }
+      return;
+    }
+
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    daysEl.textContent = String(days).padStart(2,'0');
+    if(hoursEl) hoursEl.textContent = String(hours).padStart(2,'0');
+    if(minsEl) minsEl.textContent = String(mins).padStart(2,'0');
+    if(secsEl) secsEl.textContent = String(secs).padStart(2,'0');
+
+    const remaining = Math.min(100, Math.max(0, (days / WINDOW_DAYS) * 100));
+    waxEl.style.height = remaining + '%';
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// ---------- NEW: scratch-off fortune card ----------
+(function initScratchCard(){
+  const canvas = document.getElementById('scratchCanvas');
+  const textEl = document.getElementById('scratchText');
+  const hint = document.getElementById('scratchHint');
+  if(!canvas || !textEl) return;
+
+  const fortunes = [
+    "Something you've been quietly hoping for starts moving this year.",
+    "You say yes to a trip you haven't even planned yet, and it turns out to be the best one so far.",
+    "A small risk you take pays off in a way you didn't expect.",
+    "Someone tells you exactly what you needed to hear, right when you needed it.",
+    "You finally do the thing you've been putting off — and it's easier than you thought.",
+    "This year rewards you for being exactly as stubborn as you already are."
+  ];
+  textEl.textContent = fortunes[Math.floor(Math.random()*fortunes.length)];
+
+  const ctx = canvas.getContext('2d');
+
+  function draw(){
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, '#f4b942');
+    grad.addColorStop(0.5, '#ffe2a3');
+    grad.addColorStop(1, '#f4b942');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(52,12,9,0.55)';
+    ctx.font = '600 12px "Cinzel", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SCRATCH HERE', canvas.width/2, canvas.height/2);
+  }
+  draw();
+  window.addEventListener('resize', draw);
+
+  let scratching = false;
+  let done = false;
+
+  function scratchAt(x, y){
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, 22, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  function pos(e){
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  function checkDone(){
+    if(done) return;
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let clear = 0;
+    let sampled = 0;
+    for(let i=3; i<data.length; i+=4*16){
+      sampled++;
+      if(data[i] < 40) clear++;
+    }
+    if(sampled && clear / sampled > 0.5){
+      done = true;
+      canvas.classList.add('done');
+      if(hint) hint.textContent = '';
+      if(typeof burstHeartsAt === 'function'){
+        const rect = canvas.getBoundingClientRect();
+        burstHeartsAt(rect.left + rect.width/2, rect.top + rect.height/2);
+      }
+    }
+  }
+
+  function startScratch(e){ scratching = true; const p = pos(e); scratchAt(p.x, p.y); }
+  function moveScratch(e){ if(!scratching) return; const p = pos(e); scratchAt(p.x, p.y); checkDone(); }
+  function endScratch(){ scratching = false; checkDone(); }
+
+  canvas.addEventListener('mousedown', startScratch);
+  canvas.addEventListener('mousemove', moveScratch);
+  window.addEventListener('mouseup', endScratch);
+  canvas.addEventListener('touchstart', startScratch, {passive:true});
+  canvas.addEventListener('touchmove', moveScratch, {passive:true});
+  canvas.addEventListener('touchend', endScratch);
+})();
+
 // ---------- Ik Vaari Aa song: persists across every page, until the tab closes ----------
 (function initSuitSuitPlayer(){
   var VIDEO_ID = "y4Ln-14NIBM"; // Ik Vaari Aa — Raabta, Arijit Singh
@@ -483,12 +628,17 @@ function launchMegaBurst(x, y){
   });
 })();
 
-// ---------- ambient floating embers (every page) ----------
+// ---------- ambient floating embers (every page, capped so low-end / mobile devices don't drown in DOM nodes) ----------
 (function initEmbers(){
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduceMotion) return;
+  const isSmall = window.matchMedia && window.matchMedia('(max-width: 600px)').matches;
+  const maxActive = isSmall ? 8 : 18;
+  let active = 0;
 
   function spawnEmber(){
+    if(active >= maxActive) return;
+    active++;
     const e = document.createElement('div');
     e.className = 'ember';
     const size = 3 + Math.random() * 4;
@@ -499,12 +649,12 @@ function launchMegaBurst(x, y){
     e.style.animationDuration = duration + 's';
     e.style.setProperty('--drift', (Math.random() * 140 - 70) + 'px');
     document.body.appendChild(e);
-    e.addEventListener('animationend', () => e.remove());
+    e.addEventListener('animationend', () => { e.remove(); active--; });
   }
 
   function loop(){
     spawnEmber();
-    setTimeout(loop, 550 + Math.random() * 500);
+    setTimeout(loop, (isSmall ? 900 : 550) + Math.random() * 500);
   }
   loop();
 })();
@@ -558,7 +708,7 @@ function launchMegaBurst(x, y){
       orb.classList.add('active');
       requestAnimationFrame(raf);
     }
-  });
+  }, {passive:true});
 })();
 
 // ---------- gallery: staggered entrance ----------
@@ -627,20 +777,22 @@ function burstHeartsAt(x, y){
   }
 }
 
-// ---------- gallery frame 3D tilt (desktop only) ----------
+// ---------- gallery frame 3D tilt (desktop only), polaroid-aware so the base rotation isn't lost mid-tilt ----------
 (function initFrameTilt(){
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouchPrimary = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   if(reduceMotion || isTouchPrimary) return;
 
   document.querySelectorAll('.frame').forEach(frame => {
+    const baseRot = parseFloat(getComputedStyle(frame).getPropertyValue('--base-rot')) || 0;
+
     frame.addEventListener('mousemove', (e) => {
       const rect = frame.getBoundingClientRect();
       const px = (e.clientX - rect.left) / rect.width - 0.5;
       const py = (e.clientY - rect.top) / rect.height - 0.5;
       const tiltX = px * 16;
       const tiltY = -py * 16;
-      frame.style.transform = `perspective(600px) rotateY(${tiltX}deg) rotateX(${tiltY}deg) scale(1.05)`;
+      frame.style.transform = `rotate(${baseRot}deg) perspective(600px) rotateY(${tiltX}deg) rotateX(${tiltY}deg) scale(1.05)`;
       const glowStrength = Math.min(1, (Math.abs(px) + Math.abs(py)) * 1.3);
       frame.style.boxShadow = `0 16px 36px rgba(0,0,0,0.45), 0 0 ${18 + glowStrength*18}px ${2 + glowStrength*3}px rgba(255,204,102,${0.25 + glowStrength*0.3})`;
     });
