@@ -420,9 +420,9 @@ function launchMegaBurst(x, y){
   canvas.addEventListener('touchend', endScratch);
 })();
 
-// ---------- Tum Ho song: persists across every page, until the tab closes ----------
+// ---------- My Dil Goes Mmmm song: persists across every page, until the tab closes ----------
 (function initSuitSuitPlayer(){
-  var VIDEO_ID = "gkCKTuR-ECI"; // Tum Ho — Rockstar, Mohit Chauhan / Kavita Krishnamurthy (A.R. Rahman)
+  var VIDEO_ID = "fV4x7OCqFLA"; // My Dil Goes Mmmm — Salaam Namaste, Shaan / Gayatri Iyer (Vishal-Shekhar)
   var STORAGE_KEY = "suitsuit_state";
   var player, apiReady = false, gateHandled = false, saveInterval, label;
 
@@ -450,8 +450,8 @@ function launchMegaBurst(x, y){
   var toggleBtn = document.createElement('button');
   toggleBtn.id = 'suitSuitToggle';
   toggleBtn.className = 'suitsuit-toggle';
-  toggleBtn.setAttribute('aria-label', 'Toggle Tum Ho song');
-  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Tum Ho" — tap to mute</span>';
+  toggleBtn.setAttribute('aria-label', 'Toggle My Dil Goes Mmmm song');
+  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "My Dil Goes Mmmm" — tap to mute</span>';
 
   function mount(){
     document.body.appendChild(playerHost);
@@ -464,7 +464,7 @@ function launchMegaBurst(x, y){
 
   function setLabel(unmuted){
     if(!label) label = document.getElementById('suitSuitLabel');
-    if(label) label.textContent = unmuted ? 'Playing "Tum Ho" — tap to mute' : 'Muted — tap to unmute';
+    if(label) label.textContent = unmuted ? 'Playing "My Dil Goes Mmmm" — tap to mute' : 'Muted — tap to unmute';
   }
 
   function startSaving(){
