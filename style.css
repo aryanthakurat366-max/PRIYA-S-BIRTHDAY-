@@ -13,16 +13,30 @@
 
 body{
   margin:0;
-  background:
+  background-image:
     radial-gradient(ellipse at top left, rgba(156,46,38,0.55) 0%, transparent 55%),
     radial-gradient(ellipse at bottom right, rgba(28,61,102,0.6) 0%, transparent 55%),
     linear-gradient(135deg, var(--night) 0%, var(--night-deep) 38%, var(--blue-deep) 62%, var(--blue) 100%);
+  background-size: 180% 180%, 180% 180%, 220% 220%;
+  background-position: 0% 0%, 100% 100%, 0% 50%;
   background-attachment: fixed;
+  animation: bgDrift 26s ease-in-out infinite alternate;
   color: var(--cream);
   font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   font-weight: 500;
   min-height:100vh;
   overflow-x:hidden;
+}
+
+/* slow drifting nebula — the background never sits still */
+@keyframes bgDrift{
+  0%{ background-position: 0% 0%, 100% 100%, 0% 50%; }
+  50%{ background-position: 30% 20%, 70% 80%, 50% 30%; }
+  100%{ background-position: 10% 40%, 90% 60%, 100% 70%; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body{animation:none;}
 }
 
 a{color:inherit;}
@@ -149,25 +163,54 @@ h1 em{
   line-height:1;
 }
 
+/* ---------- old-school letter look: aged parchment, torn edge, faint fold lines ---------- */
 .letter{
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  position: relative;
+  background:
+    repeating-linear-gradient(180deg, rgba(122,31,24,0.05) 0px, rgba(122,31,24,0.05) 1px, transparent 1px, transparent 34px),
+    radial-gradient(ellipse at 15% 10%, rgba(122,31,24,0.06), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(122,31,24,0.07), transparent 55%),
+    linear-gradient(180deg, #f7efdc 0%, #efe1c0 100%);
+  border: 1px solid rgba(122,31,24,0.18);
+  border-radius: 3px;
   padding: 48px 40px;
   margin-bottom: 64px;
   font-size: 19px;
   line-height: 1.85;
-  color: rgba(246,241,230,0.92);
+  color: #3a2418;
+  box-shadow: 0 24px 46px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(122,31,24,0.1);
+  transform: rotate(-0.4deg);
 }
 
-.letter p{margin: 0 0 20px;}
+.letter:nth-of-type(even){ transform: rotate(0.4deg); }
+
+/* deckled / torn paper edge along the top and bottom */
+.letter::before,
+.letter::after{
+  content:'';
+  position:absolute;
+  left:0; right:0;
+  height:8px;
+  background-image: radial-gradient(circle at 50% 100%, transparent 60%, #efe1c0 62%);
+  background-size: 16px 16px;
+  background-repeat: repeat-x;
+}
+.letter::before{ top:-1px; transform: rotate(180deg); }
+.letter::after{ bottom:-1px; }
+
+.letter p{margin: 0 0 20px; font-style: normal;}
 .letter p:last-child{margin-bottom:0;}
 
 .signature{
   text-align:right;
   font-style: italic;
-  color: var(--gold-soft);
+  color: #7a1f18;
   margin-top: 32px;
+}
+
+/* keep the italic gold intro lines (to-do / flip prompts) legible on parchment */
+.letter p[style*="var(--gold-soft)"]{
+  color: #8a5a10 !important;
 }
 
 /* Photo section */
@@ -477,7 +520,7 @@ footer{
   flex-shrink:0;
   width: 20px;
   height: 20px;
-  border: 1px solid var(--gold);
+  border: 1px solid #7a1f18;
   border-radius: 4px;
   margin-top: 4px;
   position: relative;
@@ -485,7 +528,7 @@ footer{
 }
 
 .check-item.checked .check-box{
-  background: var(--gold);
+  background: #7a1f18;
 }
 
 .check-box::after{
@@ -495,7 +538,7 @@ footer{
   top: 2px;
   width: 5px;
   height: 10px;
-  border: solid var(--night-deep);
+  border: solid #f7efdc;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   opacity: 0;
@@ -507,6 +550,7 @@ footer{
 }
 
 .check-item span.check-text{
+  color: #3a2418;
   transition: opacity 0.3s ease, text-decoration-color 0.3s ease;
   text-decoration: line-through;
   text-decoration-color: transparent;
@@ -514,7 +558,7 @@ footer{
 
 .check-item.checked span.check-text{
   opacity: 0.55;
-  text-decoration-color: var(--gold-soft);
+  text-decoration-color: #7a1f18;
 }
 
 /* Flip cards */
@@ -546,7 +590,7 @@ footer{
   position:absolute;
   inset:0;
   backface-visibility: hidden;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(122,31,24,0.25);
   border-radius: 6px;
   display:flex;
   align-items:center;
@@ -557,20 +601,20 @@ footer{
 }
 
 .flip-front{
-  background: rgba(255,255,255,0.03);
+  background: rgba(122,31,24,0.05);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(246,241,230,0.5);
+  color: rgba(58,36,24,0.6);
 }
 
 .flip-back{
-  background: rgba(227,181,103,0.08);
+  background: rgba(227,181,103,0.25);
   transform: rotateY(180deg);
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 16px;
   line-height: 1.5;
-  color: var(--gold-soft);
+  color: #5a3315;
   font-style: italic;
 }
 
@@ -1226,6 +1270,64 @@ footer{
 @media (prefers-reduced-motion: reduce){
   .envelope-cursor{ animation: none; }
   .envelope-paper{ transition: opacity 0.3s ease; transform: none !important; }
+}
+
+/* ---------- NEW: a real-looking feather that twirls down when a letter opens ---------- */
+.feather-wrap{
+  position: fixed;
+  z-index: 1700;
+  pointer-events: none;
+  width: 26px;
+  height: 70px;
+  margin: -10px 0 0 -13px;
+  transform: translateY(0) rotate(-10deg);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+  transition: transform 3.2s cubic-bezier(0.3,0.55,0.25,1), opacity 3.2s ease-in;
+  opacity: 1;
+}
+.feather-wrap.falling{
+  transform: translate(var(--feather-x, 40px), 62vh) rotate(var(--feather-rot, 260deg));
+  opacity: 0.05;
+}
+.feather-svg{ width:100%; height:100%; display:block; }
+
+/* ---------- NEW: lots of balloons drifting up, poppable ---------- */
+.balloon{
+  position: fixed;
+  bottom: -140px;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: pointer;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.55), var(--balloon-color, var(--gold)) 55%, rgba(0,0,0,0.25) 100%);
+  border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
+  box-shadow: inset -6px -10px 14px rgba(0,0,0,0.2), inset 6px 8px 10px rgba(255,255,255,0.25);
+  animation-name: balloonRise;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+.balloon-knot{
+  position:absolute;
+  left:50%; bottom:-6px;
+  width:8px; height:8px;
+  margin-left:-4px;
+  background: inherit;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+.balloon-string{
+  position:absolute;
+  left:50%; bottom:-46px;
+  width:1px; height:44px;
+  background: rgba(255,255,255,0.35);
+}
+@keyframes balloonRise{
+  0%{ transform: translate(0, 0) rotate(0deg); opacity:0; }
+  6%{ opacity:0.95; }
+  50%{ transform: translate(calc(var(--drift, 40px) * 0.5), -60vh) rotate(6deg); }
+  92%{ opacity:0.85; }
+  100%{ transform: translate(var(--drift, 40px), -125vh) rotate(-6deg); opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .balloon{display:none;}
 }
 
 @media (max-width: 480px){
