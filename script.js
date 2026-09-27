@@ -420,9 +420,9 @@ function launchMegaBurst(x, y){
   canvas.addEventListener('touchend', endScratch);
 })();
 
-// ---------- Ik Vaari Aa song: persists across every page, until the tab closes ----------
+// ---------- Tum Ho song: persists across every page, until the tab closes ----------
 (function initSuitSuitPlayer(){
-  var VIDEO_ID = "y4Ln-14NIBM"; // Ik Vaari Aa — Raabta, Arijit Singh
+  var VIDEO_ID = "gkCKTuR-ECI"; // Tum Ho — Rockstar, Mohit Chauhan / Kavita Krishnamurthy (A.R. Rahman)
   var STORAGE_KEY = "suitsuit_state";
   var player, apiReady = false, gateHandled = false, saveInterval, label;
 
@@ -441,7 +441,7 @@ function launchMegaBurst(x, y){
   var gate = document.createElement('div');
   gate.id = 'suitSuitGate';
   gate.className = 'suitsuit-gate';
-  gate.innerHTML = '<div><div class="suitsuit-gate-icon">🎁</div><div class="suitsuit-gate-label">Tap to enter</div></div>';
+  gate.innerHTML = '<div><div class="suitsuit-gate-icon">🎂</div><div class="suitsuit-gate-label">Tap to enter</div></div>';
 
   var playerHost = document.createElement('div');
   playerHost.id = 'suitSuitPlayer';
@@ -450,8 +450,8 @@ function launchMegaBurst(x, y){
   var toggleBtn = document.createElement('button');
   toggleBtn.id = 'suitSuitToggle';
   toggleBtn.className = 'suitsuit-toggle';
-  toggleBtn.setAttribute('aria-label', 'Toggle Ik Vaari Aa song');
-  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Ik Vaari Aa" — tap to mute</span>';
+  toggleBtn.setAttribute('aria-label', 'Toggle Tum Ho song');
+  toggleBtn.innerHTML = '🎵 <span id="suitSuitLabel">Playing "Tum Ho" — tap to mute</span>';
 
   function mount(){
     document.body.appendChild(playerHost);
@@ -464,7 +464,7 @@ function launchMegaBurst(x, y){
 
   function setLabel(unmuted){
     if(!label) label = document.getElementById('suitSuitLabel');
-    if(label) label.textContent = unmuted ? 'Playing "Ik Vaari Aa" — tap to mute' : 'Muted — tap to unmute';
+    if(label) label.textContent = unmuted ? 'Playing "Tum Ho" — tap to mute' : 'Muted — tap to unmute';
   }
 
   function startSaving(){
@@ -580,6 +580,7 @@ function launchMegaBurst(x, y){
     if(typeof launchMegaBurst === 'function') launchMegaBurst(cx, cy);
     if(typeof launchFirework === 'function') launchFirework(cx, cy);
     if(typeof heartRain === 'function') heartRain(26);
+    if(typeof launchFeather === 'function') launchFeather(cx, rect.top);
 
     seal.classList.add('hidden');
     letterBox.classList.add('show');
@@ -606,7 +607,7 @@ function launchMegaBurst(x, y){
   });
 })();
 
-// ---------- cover page: slide to reveal, now with a light-burst on tap ----------
+// ---------- cover page: slide to reveal, now with a light-burst and a falling feather on tap ----------
 (function initCover(){
   const seal = document.getElementById('coverSeal');
   const face = document.getElementById('coverFace');
@@ -616,6 +617,7 @@ function launchMegaBurst(x, y){
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     if(typeof launchFirework === 'function') launchFirework(cx, cy);
+    if(typeof launchFeather === 'function') launchFeather(cx, rect.top - 20);
 
     const burst = document.createElement('div');
     burst.className = 'seal-burst';
@@ -626,6 +628,93 @@ function launchMegaBurst(x, y){
     seal.classList.add('hidden');
     face.classList.add('open');
   });
+})();
+
+// ---------- NEW: a real-looking feather that drifts and twirls down whenever a letter opens ----------
+function launchFeather(x, y){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wrap = document.createElement('div');
+  wrap.className = 'feather-wrap';
+  wrap.style.left = x + 'px';
+  wrap.style.top = (y || 0) + 'px';
+  wrap.innerHTML = '\
+    <svg class="feather-svg" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">\
+      <defs>\
+        <linearGradient id="featherBody" x1="0" y1="0" x2="1" y2="1">\
+          <stop offset="0%" stop-color="#fff8ec"/>\
+          <stop offset="55%" stop-color="#f5dcc8"/>\
+          <stop offset="100%" stop-color="#e3b567"/>\
+        </linearGradient>\
+      </defs>\
+      <path d="M30 4 C 44 26, 52 58, 44 96 C 40 118, 34 138, 30 154 C 26 138, 20 118, 16 96 C 8 58, 16 26, 30 4 Z" fill="url(#featherBody)" stroke="rgba(122,31,24,0.25)" stroke-width="1"/>\
+      <path d="M30 6 L30 152" stroke="rgba(122,31,24,0.35)" stroke-width="1.4"/>\
+      <g stroke="rgba(122,31,24,0.22)" stroke-width="1">\
+        <path d="M30 20 L14 30 M30 20 L46 30"/>\
+        <path d="M30 36 L12 48 M30 36 L48 48"/>\
+        <path d="M30 54 L13 68 M30 54 L47 68"/>\
+        <path d="M30 72 L15 86 M30 72 L45 86"/>\
+        <path d="M30 90 L17 104 M30 90 L43 104"/>\
+        <path d="M30 108 L19 120 M30 108 L41 120"/>\
+        <path d="M30 126 L22 136 M30 126 L38 136"/>\
+      </g>\
+    </svg>';
+  document.body.appendChild(wrap);
+
+  if(reduceMotion){
+    wrap.style.opacity = '0';
+    setTimeout(() => wrap.remove(), 50);
+    return;
+  }
+
+  const endX = (Math.random() - 0.5) * 160;
+  const endRot = 180 + Math.random() * 220;
+  wrap.style.setProperty('--feather-x', endX + 'px');
+  wrap.style.setProperty('--feather-rot', endRot + 'deg');
+  requestAnimationFrame(() => wrap.classList.add('falling'));
+  setTimeout(() => wrap.remove(), 3400);
+}
+
+// ---------- NEW: lots of balloons drifting up the page, poppable for a little burst ----------
+(function initBalloons(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion) return;
+  const isSmall = window.matchMedia && window.matchMedia('(max-width: 600px)').matches;
+  const colors = ['#e3543f', '#ffcc66', '#f5dcc8', '#5c8fc4', '#c9668a', '#f4b942'];
+  const maxActive = isSmall ? 9 : 16;
+  let active = 0;
+
+  function spawnBalloon(){
+    if(active >= maxActive) return;
+    active++;
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
+    const size = 34 + Math.random() * 26;
+    balloon.style.width = size + 'px';
+    balloon.style.height = (size * 1.2) + 'px';
+    balloon.style.left = Math.random() * 96 + 'vw';
+    balloon.style.setProperty('--balloon-color', colors[Math.floor(Math.random()*colors.length)]);
+    balloon.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
+    const duration = 13 + Math.random() * 10;
+    balloon.style.animationDuration = duration + 's';
+    balloon.innerHTML = '<div class="balloon-knot"></div><div class="balloon-string"></div>';
+
+    balloon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const rect = balloon.getBoundingClientRect();
+      if(typeof burstHeartsAt === 'function') burstHeartsAt(rect.left + rect.width/2, rect.top + rect.height/2);
+      balloon.remove();
+      active--;
+    });
+
+    document.body.appendChild(balloon);
+    balloon.addEventListener('animationend', () => { if(balloon.parentNode){ balloon.remove(); active--; } });
+  }
+
+  function loop(){
+    spawnBalloon();
+    setTimeout(loop, (isSmall ? 1100 : 650) + Math.random() * 700);
+  }
+  loop();
 })();
 
 // ---------- ambient floating embers (every page, capped so low-end / mobile devices don't drown in DOM nodes) ----------
